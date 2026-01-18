@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Briefcase, Upload, Home, Sparkles, GraduationCap, Building2, Rocket, Trophy } from "lucide-react";

@@ -59,16 +59,21 @@ export default function PortfolioActions({ person, portfolioUrl }) {
         setGeneratingPDF(false);
         return;
       }
-      
-      // Check if we actually got PDF data (should be binary, not JSON)
-      if (typeof response.data === 'object' && !(response.data instanceof ArrayBuffer)) {
+
+      const pdfData = response.data;
+      const hasBinaryData = pdfData instanceof ArrayBuffer
+        || pdfData instanceof Uint8Array
+        || pdfData instanceof Blob;
+
+      if (!hasBinaryData) {
         toast.error("PDF generation issue. Try 'Save as PDF (Print)' option instead.");
         setGeneratingPDF(false);
         return;
       }
-      
-      // Download the PDF
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+
+      const blob = pdfData instanceof Blob
+        ? pdfData
+        : new Blob([pdfData], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
